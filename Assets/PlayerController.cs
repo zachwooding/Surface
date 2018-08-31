@@ -26,6 +26,7 @@ public class PlayerController : NetworkBehaviour {
         }
         float xMov = Input.GetAxisRaw("Horizontal");
         float zMov = Input.GetAxisRaw("Vertical");
+      
 
         Vector3 movHorizontal = transform.right * xMov;
         Vector3 movVertical = transform.forward * zMov;

@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMotor : MonoBehaviour {
+public class PlayerMotor : NetworkBehaviour {
 
     [SerializeField]
     private Camera cam;
+    [SerializeField]
+    private float jumpForce = 2.0f;
 
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
+    private Vector3 jump = new Vector3(0.0f, 2.0f, 0.0f);
     private Vector3 cameraRotation = Vector3.zero;
+    private bool isGrounded = true;
 
     private Rigidbody rb;
 	// Use this for initialization
@@ -55,5 +60,23 @@ public class PlayerMotor : MonoBehaviour {
         {
             cam.transform.Rotate(-cameraRotation);
         }
+    }
+
+    private void OnCollisionStay()
+    {
+        isGrounded = true;
+    }
+
+    void Update()
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        } 
     }
 }
